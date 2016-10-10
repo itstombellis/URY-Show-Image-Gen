@@ -3,6 +3,8 @@ from PIL import ImageFont
 from PIL import ImageDraw
 from random import randint
 
+imagePath = "images/"
+
 def add_text(showName):
     """
     Args:
@@ -16,15 +18,15 @@ def add_text(showName):
     if showName == '':
         raise Exception("No show name provided.")
     elif showName[:10] == 'URY Brunch': #AM Flagship
-        img = Image.open("AMFlagshipBackground.png")
+        img = Image.open(imagePath + "AMFlagshipBackground.png")
     elif showName[:6] == 'URY:PM': #PM Flagship
-        img = Image.open("PMFlagshipBackground.png")
+        img = Image.open(imagePath + "PMFlagshipBackground.png")
     
     # If the show is not flagship, there is a list of backgrounds to randomly generate a show image.
     else:
         rGI = randint(0,7)
         RandomBackgrounds = ["Other1.png","Other2.png","Other3.png","Other4.png","Other5.png","Other6.png","Other7.png","Other8.png"] #List of different backgrounds.
-        img = Image.open(RandomBackgrounds[rGI])
+        img = Image.open(imagePath + RandomBackgrounds[rGI])
     
     #This works out if the show name will fit neatly on the image, if the show name is less than 14 characters the normalize function will not be called.
     if len(showName) <= 14:
@@ -37,9 +39,9 @@ def add_text(showName):
     # font = ImageFont.truetype(<font-file>, <font-size>)
     font = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", font_size)
     draw = ImageDraw.Draw(img)
-    w, h = draw.textsize(prshowName)
+    w, h = draw.textsize(prshowName, font)
     # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text((60, 60),prshowName,(255,255,255),font)
+    draw.text(((800-w)/2, 70),prshowName,(255,255,255),font, align='center')
     img.save('Showimages/%s.jpg' %showName)
 
 def normalize(input):
