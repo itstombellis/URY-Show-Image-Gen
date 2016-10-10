@@ -1,10 +1,3 @@
-'''
-    To Do:
-        - Centre Text to middle of box, depending on number of lines of text.
-        - Should Name the file differently with only alpha numeric characters.
-        - Should email/ log error if show name is uncompatable.
-'''
-
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
