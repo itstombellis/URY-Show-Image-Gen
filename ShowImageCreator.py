@@ -34,6 +34,7 @@ def add_text(showName):
     else:
         prshowName = normalize(showName)
     print(prshowName)
+    
     #Adds the text to the selected image.
     font_size = 85
     # font = ImageFont.truetype(<font-file>, <font-size>)
