@@ -33,15 +33,16 @@ def add_text(showName):
         prshowName = showName
     else:
         prshowName = normalize(showName)
-    
+    print(prshowName)
     #Adds the text to the selected image.
     font_size = 85
     # font = ImageFont.truetype(<font-file>, <font-size>)
     font = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", font_size)
     draw = ImageDraw.Draw(img)
     w, h = draw.textsize(prshowName, font)
+    height = lineCount(prshowName)
     # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text(((800-w)/2, 70),prshowName,(255,255,255),font, align='center')
+    draw.text(((800-w)/2, height),prshowName,(255,255,255),font, align='center')
     img.save('Showimages/%s.jpg' %showName)
 
 def normalize(input):
@@ -61,9 +62,26 @@ def normalize(input):
             output.append(word)
 
     if len(output) > 4:
-        raise Exception("Spans too many lines for image. Contact DCM bitches.")
+        raise Exception("Spans too many lines for image. Contact DCM.")
 
     return "".join(item + "\n" for item in output)
+
+def lineCount(input):
+    '''
+    Takes the output of normalise and counts the number of line breaks. 
+    Returns the height depen
+    '''
+    lines = input.count('\n') + 1
+    if lines == 1:
+        output = 190
+    elif lines == 2:
+        output = 180
+    elif lines == 3:
+        output = 130
+    else:
+        output = 70
+
+    return (output)
 
 ################
 #### Tests #####
