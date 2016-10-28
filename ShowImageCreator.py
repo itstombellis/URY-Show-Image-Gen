@@ -71,16 +71,15 @@ def lineCount(input):
     Takes the output of normalise and counts the number of line breaks. 
     Returns the height depen
     '''
-    lines = input.count('\n') + 1
-    if lines == 1:
+    lines = input.count('\n')
+    if lines == 0:
         output = 190
     elif lines == 2:
-        output = 180
+        output = 160
     elif lines == 3:
-        output = 130
+        output = 110
     else:
         output = 70
-
     return (output)
 
 ################
@@ -103,4 +102,3 @@ for i in range(0,len(output)):
     output[i] = output[i].rstrip('\n')
 for el in output:
     add_text(el)
-    
