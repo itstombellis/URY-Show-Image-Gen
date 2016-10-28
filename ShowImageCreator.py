@@ -75,11 +75,11 @@ def lineCount(input):
     if lines == 0:
         output = 190
     elif lines == 2:
-        output = 160
+        output = 150
     elif lines == 3:
-        output = 110
+        output = 105
     else:
-        output = 70
+        output = 65
     return (output)
 
 ################
