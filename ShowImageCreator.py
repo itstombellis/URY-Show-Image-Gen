@@ -24,8 +24,8 @@ def add_text(showName, outputName):
     
     # If the show is not flagship, there is a list of backgrounds to randomly generate a show image.
     else:
-        rGI = randint(0,7) + 1
-        img = Image.open(imagePath + "Other" + rGI +".png") #Image backgrounds must be in the form of "Other[int].png" adjust the random int function depending on the amount of other images.
+        rGI = randint(1,15)
+        img = Image.open(imagePath + "Other" + str(rGI) +".png") #Image backgrounds must be in the form of "Other[int].png" adjust the random int function depending on the amount of other images.
     
     #This works out if the show name will fit neatly on the image, if the show name is less than 14 characters the normalize function will not be called.
     if len(showName) <= 14:
