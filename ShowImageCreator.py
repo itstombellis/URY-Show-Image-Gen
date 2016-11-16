@@ -2,21 +2,21 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 from random import randint
-import urllib, json, sys
+import json, sys, requests
+
 
 imagePath = "images/"
 
 apiKey = sys.argv[1]
 
+url = "https://ury.org.uk/api/v2/show/allshows?current_term_only=1&api_key=" + apiKey
+
+
 def getShows():
     """
     Returns a dictionary of shows with show id mapping to the show title
     """
-    
-    url = "https://ury.org.uk/api/v2/show/allshows?current_term_only=1&api_key=" + apiKey
-    response = urllib.urlopen(url)
-    data = json.loads(response.read())
-
+    data = requests.get(url).json()
 
     shows = {}
 
@@ -123,5 +123,8 @@ for i in range(0,len(output)):
 for el in output:
     add_text(el)
 '''
-for key in getShows():
+
+ShowsDict = getShows()
+
+for key in ShowsDict:
     add_text(ShowsDict[key], str(key))
