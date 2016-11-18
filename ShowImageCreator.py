@@ -14,7 +14,9 @@ url = "https://ury.org.uk/api/v2/show/allshows?current_term_only=1&api_key=" + a
 
 def getShows():
     """
-    Returns a dictionary of shows with show id mapping to the show title
+    A function to return a dictionary of shows with show id mapping to the show title.
+    Return:
+        The dictionary of shows with show ids mapping to the show title.
     """
     data = requests.get(url).json()
 
@@ -28,9 +30,11 @@ def getShows():
 
 def add_text(showName, outputName):
     """
+    A function to create a show image for given show name and output file name.
     Args:
         showName (str): Show name to add to image.
-    Output:
+        outputName (str): The name of the outputfile, standard form including the show id.
+    Return:
         The function outputs a JPG image to a sub folder called ShowImages.
     """
     print(showName) #Prints to the console which show is being processed.
@@ -67,10 +71,11 @@ def add_text(showName, outputName):
 
 def normalize(input):
     """
+    A funtion to insert line breaks so that the text is no longer than 14 characters (including spaces) so that it will fit in the drawn box.
     Args:
         input (str): Takes in a string for a show name.
-    Returns:
-        A string containg line breaks so the text is not longer that 14 characters (including spaces)
+    Return:
+        A string containg line breaks so the text is not longer than 14 characters (including spaces).
     """
     output = []
     for word in input.split(" "):
@@ -87,10 +92,13 @@ def normalize(input):
     return "".join(item + "\n" for item in output)
 
 def lineCount(input):
-    '''
-    Takes the output of normalise and counts the number of line breaks. 
-    Returns the height depen
-    '''
+    """
+    A function that takes the output of normalise and counts the number of line breaks.
+    Args:
+        input (str): The string to have number of lines calculated after being normalized
+    Return:
+        The height depenending on the number of lines the string will occupy.
+    """
     lines = input.count('\n')
     if lines == 0:
         output = 190
@@ -105,15 +113,17 @@ def lineCount(input):
 ################
 #### Tests #####
 ################
-#add_text('URY Brunch Some Show Name')
-#add_text('URY:PM Some Show Name')
-#add_text('Some Show Name')
-#add_text('Building Bridges - TheRoadtoRockandRoll and Roll')
-#print(normalize("Building Bridges - The Road to Rock and Roll"))
-
+"""
+add_text('URY Brunch Some Show Name')
+add_text('URY:PM Some Show Name')
+add_text('Some Show Name')
+add_text('Building Bridges - TheRoadtoRockandRoll and Roll')
+print(normalize("Building Bridges - The Road to Rock and Roll"))
+"""
 
 ## This runs through a file to generate show images.
-'''output =[]
+"""
+output =[]
 f = open('Shows.txt', 'r')
 for line in f:
     output.append(line)
@@ -122,7 +132,7 @@ for i in range(0,len(output)):
     output[i] = output[i].rstrip('\n')
 for el in output:
     add_text(el)
-'''
+"""
 
 ShowsDict = getShows()
 
