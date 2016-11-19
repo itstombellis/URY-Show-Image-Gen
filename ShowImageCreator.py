@@ -86,7 +86,8 @@ def applyBrand(showName, outputName, branding):
     draw.text(((800-w)/2, otherLinesTextHeight), formattedOtherLines,(255,255,255),otherLinesFont, align='center')
 
 # website URY formatting
-    websiteURL = 'URY.ORG.UK | @ury1350'
+    websiteURL = 'URY.ORG.UK | @URY1350'
+    websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", otherLinesTextSize)
     draw = ImageDraw.Draw(img)
     w, h = draw.textsize(websiteURL, otherLinesFont)
     otherLinesTextHeight = 490 
@@ -104,8 +105,9 @@ def firstLineNormalize(input):
     unused = ''
     for word in input.split(" "):
         if (len(word) > maxFirstLineLength) & (len(output) < maxFirstLineLength):
-            raise Exception("Word too long for image. Contact DCM.")
-        elif len(output) < maxFirstLineLength:
+            #raise Exception("Word too long for image. Contact DCM.")
+            continue
+        elif len(output+ ' ' + word) < maxFirstLineLength:
             output += str(word.upper()) + ' '
         else:
             unused += str(word.upper()) + ' '
