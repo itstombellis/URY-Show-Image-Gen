@@ -106,7 +106,7 @@ def firstLineNormalize(input):
     for word in input.split(" "):
         if (len(word) > maxFirstLineLength) & (len(output) < maxFirstLineLength):
             #raise Exception("Word too long for image. Contact DCM.")
-            continue
+            break
         elif len(output+ ' ' + word) < maxFirstLineLength:
             output += str(word.upper()) + ' '
         else:
