@@ -141,9 +141,10 @@ def log(type, message, errorMessage="No error message."):
     if type=="DCM":
         pass #Call send email function to DCM
 
-
+################################
 ################################
 #### Uses API To Get Shows #####
+################################
 ################################
 
 ShowsDict = getShows()
