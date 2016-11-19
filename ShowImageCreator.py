@@ -148,26 +148,6 @@ def otherLinesNormalize(input):
 ################
 #### Tests #####
 ################
-"""
-add_text('URY Brunch Some Show Name')
-add_text('URY:PM Some Show Name')
-add_text('Some Show Name')
-add_text('Building Bridges - TheRoadtoRockandRoll and Roll')
-print(normalize("Building Bridges - The Road to Rock and Roll"))
-"""
-
-## This runs through a file to generate show images.
-"""
-output =[]
-f = open('Shows.txt', 'r')
-for line in f:
-    output.append(line)
-f.close()
-for i in range(0,len(output)):
-    output[i] = output[i].rstrip('\n')
-for el in output:
-    add_text(el)
-"""
 
 ShowsDict = getShows()
 
