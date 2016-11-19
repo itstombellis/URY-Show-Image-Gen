@@ -8,9 +8,7 @@ import json, sys, requests
 # Defines location of different image files to create show image.
 backgroundImagePath = "GenericShowBackgrounds/"
 colouredBarsPath = "ColouredBars/"
-
 apiKey = sys.argv[1]
-
 url = "https://ury.org.uk/api/v2/show/allshows?current_term_only=1&api_key=" + apiKey
 
 
@@ -21,7 +19,6 @@ def getShows():
         The dictionary of shows with show ids mapping to the show title.
     """
     data = requests.get(url).json()
-
     shows = {}
 
     for show in data["payload"]:
@@ -59,7 +56,7 @@ def applyBrand(showName, outputName, branding):
     img.paste(overlay, (0, 0), overlay)
 
 # First line formatting
-    firstLineText, otherLines = firstLineNormalize(showName)
+    firstLineText, otherLines = normalize(showName)
     firstLineFontSize = 85
     # firstLineFont = ImageFont.truetype(<font-file>, <font-size>)
     firstLineFont = ImageFont.truetype("Raleway-Bold.ttf", firstLineFontSize)
@@ -75,81 +72,67 @@ def applyBrand(showName, outputName, branding):
     otherLinesTextSize = 50
     # firstLineFont = ImageFont.truetype(<font-file>, <font-size>)
     otherLinesFont = ImageFont.truetype("Raleway-LightItalic.ttf", otherLinesTextSize)
-    
-    formattedOtherLines = otherLinesNormalize(otherLines)
 
     draw = ImageDraw.Draw(img)
-    w, h = draw.textsize(formattedOtherLines, otherLinesFont)
+    w, h = draw.textsize(otherLines, otherLinesFont)
     otherLinesTextHeight = 300
     
     # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text(((800-w)/2, otherLinesTextHeight), formattedOtherLines,(255,255,255),otherLinesFont, align='center')
+    draw.text(((800-w)/2, otherLinesTextHeight), otherLines,(255,255,255),otherLinesFont, align='center')
 
 # website URY formatting
-    websiteURL = 'URY.ORG.UK | @URY1350'
+    websiteURL = 'URY.ORG.UK/LIVE \n @URY1350'
     websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", otherLinesTextSize)
     draw = ImageDraw.Draw(img)
     w, h = draw.textsize(websiteURL, otherLinesFont)
-    otherLinesTextHeight = 490 
+    websiteURLHeight = 510 
     
     # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text(((800-w)/2, otherLinesTextHeight), websiteURL,(255,255,255),otherLinesFont, align='center')
+    draw.text(((800-w)/2, websiteURLHeight), websiteURL,(255,255,255),otherLinesFont, align='center')
 
 # Saves the image as the output name in a subfolder ShowImages    
     img.save('ShowImages/%s.jpg' %outputName)
 
 
-def firstLineNormalize(input):
-    maxFirstLineLength = 13
+def normalize(input):
     words = input.split(" ")
-    output = ''
-    unused = ''
+    maxFirstLineLength = 13
+    maxOtherLinesLength = 22
+    firstLine = ''
+    otherLinesList = []
+    firstLineFull = False
 
-    while True:
-        try:
-            word = words.pop(0)
-        except IndexError:
-            break
-
-        if (len(word) > maxFirstLineLength) and (len(output) < maxFirstLineLength):
-            #raise Exception("Word too long for image. Contact DCM.")
-            break
-        elif len(output + ' ' + word) < maxFirstLineLength:
-            output += str(word.upper()) + ' '
+    for word in words:
+        if firstLineFull == False:
+            if (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength):
+                #raise Exception("Word too long for image. Contact DCM.")
+                break
+            elif len(firstLine + word) <= maxFirstLineLength:
+                firstLine += str(word.upper()) + ' '
+            else:
+                firstLineFull = True
+                otherLinesList = dealWithOherLines(otherLinesList, word, maxOtherLinesLength)
         else:
-            unused += str(word.upper()) + ' '
-            break
-
-    while True:
-        try:
-            unused += str(words.pop(0).upper()) + ' '
-        except IndexError:
-            break
-
-    return output, unused
+            otherLinesList = dealWithOherLines(otherLinesList, word, maxOtherLinesLength)
+    otherLines = "".join(item + "\n" for item in otherLinesList)
+    return firstLine, otherLines
 
 
-def otherLinesNormalize(input):
-    maxFirstLineLength = 22
-    output = []
-    for word in input.split(" "):
-        if len(word) > maxFirstLineLength:
-            raise Exception("Word too long for image. Contact DCM.")
-        elif len(output) > 0 and (len(output[-1]) + len(word) < maxFirstLineLength):
-            output[-1] += " " + word
-        else:
-            output.append(word)
+def dealWithOherLines(otherLinesList, word, maxOtherLinesLength):
+    if len(word) > maxOtherLinesLength:
+        raise Exception("Word too long for image. Contact DCM.")
+    elif len(otherLinesList) > 0 and (len(otherLinesList[-1]) + len(word) < maxOtherLinesLength):
+        otherLinesList[-1] += " " + word
+    else:
+        otherLinesList.append(word)
+    return otherLinesList
 
-    if len(output) > 4:
-        raise Exception("Spans too many lines for image. Contact DCM.")
 
-    return "".join(item + "\n" for item in output)
-
-################
-#### Tests #####
-################
+################################
+#### Uses API To Get Shows #####
+################################
 
 ShowsDict = getShows()
 
 for key in ShowsDict:
-    applyBrand(ShowsDict[key], str(key), 'OB')
+    applyBrand(ShowsDict[key], str(key), 'Music')
