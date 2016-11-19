@@ -27,8 +27,8 @@ def getShows():
             shows[data["payload"][show]["show_id"]] = data["payload"][show]["title"]
 
         return shows
-    except:
-        log("Error","Could not acess API.","Function getShows().")
+    except Exception, e:
+        log("Error","Could not acess API.",str(e))
 
 
 def applyBrand(showName, outputName, branding):
