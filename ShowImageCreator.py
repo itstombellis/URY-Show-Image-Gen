@@ -3,7 +3,7 @@ from PIL import ImageFont
 from PIL import ImageDraw
 from random import randint
 import json, sys, requests
-
+from time import gmtime, strftime
 
 # Defines location of different image files to create show image.
 backgroundImagePath = "GenericShowBackgrounds/"
@@ -18,13 +18,17 @@ def getShows():
     Return:
         The dictionary of shows with show ids mapping to the show title.
     """
-    data = requests.get(url).json()
-    shows = {}
+    try:
+        data = requests.get(url).json()
+        shows = {}
 
-    for show in data["payload"]:
-        shows[data["payload"][show]["show_id"]] = data["payload"][show]["title"]
+        for show in data["payload"]:
+            shows[data["payload"][show]["show_id"]] = data["payload"][show]["title"]
 
-    return shows
+        return shows
+    except:
+        log("API","Could not acess API.")
+        sys.exit(0)
 
 
 def applyBrand(showName, outputName, branding):
@@ -97,7 +101,6 @@ def applyBrand(showName, outputName, branding):
 def normalize(input):
     words = input.split(" ")
     maxFirstLineLength = 13
-    maxOtherLinesLength = 22
     firstLine = ''
     otherLinesList = []
     firstLineFull = False
@@ -105,22 +108,24 @@ def normalize(input):
     for word in words:
         if firstLineFull == False:
             if (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength):
-                #raise Exception("Word too long for image. Contact DCM.")
+                log("DCM", word +" is too long for image.", showID)
                 break
             elif len(firstLine + word) <= maxFirstLineLength:
                 firstLine += str(word.upper()) + ' '
             else:
                 firstLineFull = True
-                otherLinesList = dealWithOherLines(otherLinesList, word, maxOtherLinesLength)
+                otherLinesList = dealWithOtherLines(otherLinesList, word)
         else:
-            otherLinesList = dealWithOherLines(otherLinesList, word, maxOtherLinesLength)
+            otherLinesList = dealWithOtherLines(otherLinesList, word)
     otherLines = "".join(item + "\n" for item in otherLinesList)
     return firstLine, otherLines
 
 
-def dealWithOherLines(otherLinesList, word, maxOtherLinesLength):
+def dealWithOtherLines(otherLinesList, word):
+    maxOtherLinesLength = 22
     if len(word) > maxOtherLinesLength:
-        raise Exception("Word too long for image. Contact DCM.")
+        log("DCM", "Word too long for image.", showID, "Within function dealWithOtherLines().")
+        raise Exception
     elif len(otherLinesList) > 0 and (len(otherLinesList[-1]) + len(word) < maxOtherLinesLength):
         otherLinesList[-1] += " " + word
     else:
@@ -128,11 +133,26 @@ def dealWithOherLines(otherLinesList, word, maxOtherLinesLength):
     return otherLinesList
 
 
+def log(type, message, showNum="", errorMessage="No exception error message."):
+    f=open("logfile.log","a")
+    curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    f.write(curTime + " - [" + type.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
+    f.close()
+    if type=="DCM":
+        pass #Call send email function to DCM
+
+################################
 ################################
 #### Uses API To Get Shows #####
+################################
 ################################
 
 ShowsDict = getShows()
 
 for key in ShowsDict:
-    applyBrand(ShowsDict[key], str(key), 'Music')
+    
+    showName = ShowsDict[key]
+    showID = str(key)
+    branding = 'OB'
+
+    applyBrand(showName, showID, branding)
