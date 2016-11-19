@@ -5,7 +5,6 @@ from random import randint
 import json, sys, requests
 from time import gmtime, strftime
 
-
 # Defines location of different image files to create show image.
 backgroundImagePath = "GenericShowBackgrounds/"
 colouredBarsPath = "ColouredBars/"
@@ -109,7 +108,7 @@ def normalize(input):
     for word in words:
         if firstLineFull == False:
             if (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength):
-                log("DCM",input+": " + word +" is too long for image.")
+                log("DCM", word +" is too long for image.")
                 break
             elif len(firstLine + word) <= maxFirstLineLength:
                 firstLine += str(word.upper()) + ' '
@@ -133,10 +132,10 @@ def dealWithOtherLines(otherLinesList, word, maxOtherLinesLength):
     return otherLinesList
 
 
-def log(type, message, errorMessage="No error message."):
+def log(type, message, errorMessage="No exception error message."):
     f=open("logfile.log","a")
     curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    f.write(curTime+" - ["+type.upper()+"] "+message+"\n"+errorMessage+"\n")
+    f.write(curTime + " - [" + type.upper() + "] Show ID: {" + showID + "} " + message + "\n" + errorMessage + "\n")
     f.close()
     if type=="DCM":
         pass #Call send email function to DCM
@@ -150,4 +149,9 @@ def log(type, message, errorMessage="No error message."):
 ShowsDict = getShows()
 
 for key in ShowsDict:
-    applyBrand(ShowsDict[key], str(key), 'Music')
+    
+    showName = ShowsDict[key]
+    showID = str(key)
+    branding = 'OB'
+
+    applyBrand(showName, showID, branding)
