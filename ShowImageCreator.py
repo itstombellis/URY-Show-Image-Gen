@@ -27,7 +27,7 @@ def getShows():
             shows[data["payload"][show]["show_id"]] = data["payload"][show]["title"]
 
         return shows
-    except Exception, e:
+    except Exception as e:
         log("Error","Could not acess API.",str(e))
 
 
