@@ -109,7 +109,7 @@ def normalize(input):
     for word in words:
         if firstLineFull == False:
             if (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength):
-                log("DCM",input+": " + word +"too long for image.")
+                log("DCM",input+": " + word +" is too long for image.")
                 break
             elif len(firstLine + word) <= maxFirstLineLength:
                 firstLine += str(word.upper()) + ' '
