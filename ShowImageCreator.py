@@ -101,16 +101,31 @@ def applyBrand(showName, outputName, branding):
 
 def firstLineNormalize(input):
     maxFirstLineLength = 13
+    words = input.split(" ")
     output = ''
     unused = ''
-    for word in input.split(" "):
-        if (len(word) > maxFirstLineLength) & (len(output) < maxFirstLineLength):
+
+    while True:
+        try:
+            word = words.pop(0)
+        except IndexError:
+            break
+
+        if (len(word) > maxFirstLineLength) and (len(output) < maxFirstLineLength):
             #raise Exception("Word too long for image. Contact DCM.")
             break
-        elif len(output+ ' ' + word) < maxFirstLineLength:
+        elif len(output + ' ' + word) < maxFirstLineLength:
             output += str(word.upper()) + ' '
         else:
             unused += str(word.upper()) + ' '
+            break
+
+    while True:
+        try:
+            unused += str(words.pop(0).upper()) + ' '
+        except IndexError:
+            break
+
     return output, unused
 
 
