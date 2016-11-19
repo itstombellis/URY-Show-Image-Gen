@@ -40,11 +40,14 @@ def applyBrand(showName, outputName, branding):
     Return:
         The function outputs a JPG image to a sub folder called ShowImages.
     """
+    # Hack to get branding from show name
+    branding = brandingFromShowName(showName)
+
     # Determines which overlay to apply to the show image.
     if branding == "Speech":
         brandingOverlay = "GreenSpeech.png"
     elif branding == "News":
-        brandingOverlay = "GreenSpeech.png"
+        brandingOverlay = "BlueGeneral.png"
     elif branding == "Music":
         brandingOverlay = "PurpleMusic.png"
     elif branding == "OB":
@@ -97,6 +100,29 @@ def applyBrand(showName, outputName, branding):
 # Saves the image as the output name in a subfolder ShowImages    
     img.save('ShowImages/%s.jpg' %outputName)
 
+def brandingFromShowName(showName):
+    if showName[:13] == "URY Presents:":
+        output = 'OB'
+    elif showName == "The URY Pantomime 2016: Beauty and the Beast":
+        output = 'OB'
+    elif showName == "Georgie and Angie's Book Corner":
+        output = 'Speech'
+    elif showName == "Stage":
+        output = 'Speech'
+    elif showName == "Speech Showcase":
+        output = 'Speech'
+    elif showName == "Screen":
+        output = 'Speech'
+    elif showName == "URY Newshour":
+        output = 'News'
+    elif showName == "York Sport Report":
+        output = 'News'
+    elif showName == "URY:PM - (( URY Music ))":
+        output = 'Music'
+    else:
+        output = ''
+
+    return output
 
 def normalize(input):
     words = input.split(" ")
