@@ -42,7 +42,7 @@ def applyBrand(showName, outputName, branding):
     """
     # Hack to get branding from show name
     branding = brandingFromShowName(showName)
-
+    showName = stripPrefix(showName)
     # Determines which overlay to apply to the show image.
     if branding == "Speech":
         brandingOverlay = "GreenSpeech.png"
@@ -105,6 +105,8 @@ def brandingFromShowName(showName):
         output = 'OB'
     elif showName == "The URY Pantomime 2016: Beauty and the Beast":
         output = 'OB'
+    elif showName[:1] == "#":
+        output = 'OB'
     elif showName == "Georgie and Angie's Book Corner":
         output = 'Speech'
     elif showName == "Stage":
@@ -121,8 +123,18 @@ def brandingFromShowName(showName):
         output = 'Music'
     else:
         output = ''
-
     return output
+
+
+def stripPrefix(showName):
+    if showName[:12] == "URY Brunch -":
+        output = showName[12:]
+    elif showName[:8] == "URY:PM -":
+        output = showName[8:]
+    else:
+        output = showName
+    return output
+
 
 def normalize(input):
     words = input.split(" ")
@@ -175,7 +187,6 @@ def log(type, message, showNum="", errorMessage="No exception error message."):
 #### Uses API To Get Shows #####
 ################################
 ################################
-
 
 ShowsDict = getShows()
 
