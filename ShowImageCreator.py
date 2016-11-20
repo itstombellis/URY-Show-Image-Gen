@@ -133,8 +133,11 @@ def normalize(input):
 
     for word in words:
         if firstLineFull == False:
-            if (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength):
-                log("DCM", word +" is too long for image.", showID)
+            if (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength) and (len(firstLine) > 0):
+                firstLineFull = True
+                otherLinesList = dealWithOtherLines(otherLinesList, word)
+            elif (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength):
+                log("DCM", word +" is too long for first line of image.", showID)
                 break
             elif len(firstLine + word) <= maxFirstLineLength:
                 firstLine += str(word.upper()) + ' '
@@ -172,6 +175,7 @@ def log(type, message, showNum="", errorMessage="No exception error message."):
 #### Uses API To Get Shows #####
 ################################
 ################################
+
 
 ShowsDict = getShows()
 
