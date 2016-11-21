@@ -152,7 +152,7 @@ def normalize(input):
                 log("DCM", word +" is too long for first line of image.", showID)
                 break
             elif len(firstLine + word) <= maxFirstLineLength:
-                firstLine += str(word.upper()) + ' '
+                firstLine += str(word) + ' '
             else:
                 firstLineFull = True
                 otherLinesList = dealWithOtherLines(otherLinesList, word)
