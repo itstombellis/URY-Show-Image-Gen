@@ -209,7 +209,7 @@ def dealWithOtherLines(otherLinesList, word):
 def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
     if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API"):
         f=open("logfile.log","a")
-        curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        curTime = strftime("%Y-%m-%d %H:%M:%S")
         now = datetime.now()
         curTime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
         f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
