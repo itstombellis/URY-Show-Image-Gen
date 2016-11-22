@@ -4,6 +4,7 @@ from PIL import ImageDraw
 from random import randint
 import json, sys, requests
 from datetime import time
+from time import strftime
 
 # Defines location of different image files to create show image.
 backgroundImagePath = "GenericShowBackgrounds/"
