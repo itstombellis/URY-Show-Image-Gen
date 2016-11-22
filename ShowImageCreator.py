@@ -208,7 +208,9 @@ def dealWithOtherLines(otherLinesList, word):
 def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
     if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API"):
         f=open("logfile.log","a")
-        curTime = strftime("%Y-%m-%d %H:%M:%S.%f", gmtime())
+        curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        dt = datetime.datetime.now()
+        curTime = curTime + str(dt.microsecond)
         f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
         f.close()
         if typeM == "DCM" or typeM == "API":
