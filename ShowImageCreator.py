@@ -1,9 +1,8 @@
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw
+from PIL import Image, ImageFont, ImageDraw
 from random import randint
 import json, sys, requests
-from time import gmtime, strftime
+from datetime import time, datetime
+from time import strftime
 
 # Defines location of different image files to create show image.
 backgroundImagePath = "GenericShowBackgrounds/"
@@ -208,7 +207,8 @@ def dealWithOtherLines(otherLinesList, word):
 def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
     if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API"):
         f=open("logfile.log","a")
-        curTime = strftime("%Y-%m-%d %H:%M:%S.%f", gmtime())
+        now = datetime.now()
+        curTime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
         f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
         f.close()
         if typeM == "DCM" or typeM == "API":
