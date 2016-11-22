@@ -3,8 +3,7 @@ from PIL import ImageFont
 from PIL import ImageDraw
 from random import randint
 import json, sys, requests
-from time import gmtime, strftime
-import datetime
+from datetime import time
 
 # Defines location of different image files to create show image.
 backgroundImagePath = "GenericShowBackgrounds/"
@@ -210,8 +209,8 @@ def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exceptio
     if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API"):
         f=open("logfile.log","a")
         curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-        dt = datetime.time.now()
-        curTime = curTime + str(dt.microsecond)
+        now = datetime.now()
+        curTime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
         f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
         f.close()
         if typeM == "DCM" or typeM == "API":
