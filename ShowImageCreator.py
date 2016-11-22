@@ -11,6 +11,7 @@ colouredBarsPath = "ColouredBars/"
 apiKey = sys.argv[1]
 url = "https://ury.org.uk/api/v2/show/allshows?current_term_only=1&api_key=" + apiKey
 
+debugMode = sys.argv[2]
 
 def getShows():
     """
@@ -52,6 +53,8 @@ def applyBrand(showName, outputName, branding):
         brandingOverlay = "PurpleMusic.png"
     elif branding == "OB":
         brandingOverlay = "RedOB.png"
+    elif branding == "Old":
+        brandingOverlay = "WhitePreShowImageFormat.png"
     else:
         brandingOverlay = "BlueGeneral.png"
 
@@ -189,6 +192,8 @@ def log(type, message, showNum="", errorMessage="No exception error message."):
 ################################
 
 ShowsDict = getShows()
+
+print(debugMode)
 
 for key in ShowsDict:
     
