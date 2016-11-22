@@ -28,7 +28,7 @@ def getShows():
 
         return shows
     except:
-        log("API","Could not acess API.")
+        log("API","Could not acess API.", debugMode)
         sys.exit(0)
 
 
@@ -152,7 +152,7 @@ def normalize(input):
                 firstLineFull = True
                 otherLinesList = dealWithOtherLines(otherLinesList, word)
             elif (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength):
-                log("DCM", word +" is too long for first line of image.", showID)
+                log("DCM", word +" is too long for first line of image.", showID, debugMode)
                 break
             elif len(firstLine + word) <= maxFirstLineLength:
                 firstLine += str(word) + ' '
@@ -168,7 +168,7 @@ def normalize(input):
 def dealWithOtherLines(otherLinesList, word):
     maxOtherLinesLength = 22
     if len(word) > maxOtherLinesLength:
-        log("DCM", "Word too long for image.", showID, "Within function dealWithOtherLines().")
+        log("DCM", "Word too long for image.", showID, "Within function dealWithOtherLines().", debugMode)
         raise Exception
     elif len(otherLinesList) > 0 and (len(otherLinesList[-1]) + len(word) < maxOtherLinesLength):
         otherLinesList[-1] += " " + word
