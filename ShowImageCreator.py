@@ -206,12 +206,12 @@ def dealWithOtherLines(otherLinesList, word):
 
 
 def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
-    if  debugMode == True || typeM == "DCM" || typeM == "API":
+    if  debugMode == True or typeM == "DCM" or typeM == "API":
         f=open("logfile.log","a")
         curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-        f.write(curTime + " - [" + type.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
+        f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
         f.close()
-        if typeM == "DCM" || typeM == "API":
+        if typeM == "DCM" or typeM == "API":
             pass #Call send email function to DCM or computing
     else:
         pass
@@ -224,7 +224,6 @@ def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exceptio
 log("DEBUG", "Program Started!")
 ShowsDict = getShows()
 
-print(debugMode)
 
 for key in ShowsDict:
     
