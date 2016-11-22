@@ -20,6 +20,7 @@ def getShows():
         The dictionary of shows with show ids mapping to the show title.
     """
     try:
+        log("DEBUG", "Running getShows() function.")
         data = requests.get(url).json()
         shows = {}
 
@@ -42,20 +43,27 @@ def applyBrand(showName, outputName, branding):
         The function outputs a JPG image to a sub folder called ShowImages.
     """
     # Hack to get branding from show name
+    log("DEBUG", "Running applyBrand() function.", showID)
     branding = brandingFromShowName(showName)
     showName = stripPrefix(showName)
     # Determines which overlay to apply to the show image.
     if branding == "Speech":
+        log("DEBUG", "Show branding should be speech.", showID)
         brandingOverlay = "GreenSpeech.png"
     elif branding == "News":
+        log("DEBUG", "Show branding should be news.", showID)
         brandingOverlay = "BlueGeneral.png"
     elif branding == "Music":
+        log("DEBUG", "Show branding should be music.", showID)
         brandingOverlay = "PurpleMusic.png"
     elif branding == "OB":
+        log("DEBUG", "Show branding should be OB.", showID)
         brandingOverlay = "RedOB.png"
     elif branding == "Old":
+        log("DEBUG", "Show branding should be old.", showID)
         brandingOverlay = "WhitePreShowImageFormat.png"
     else:
+        log("DEBUG", "Show branding should be generic show.", showID)
         brandingOverlay = "BlueGeneral.png"
 
 # Determines which background image to use for the show image.
@@ -66,6 +74,7 @@ def applyBrand(showName, outputName, branding):
     img.paste(overlay, (0, 0), overlay)
 
 # First line formatting
+    log("DEBUG", "Formatting the first line.", showID)
     firstLineText, otherLines = normalize(showName)
     firstLineFontSize = 85
     # firstLineFont = ImageFont.truetype(<font-file>, <font-size>)
@@ -79,6 +88,7 @@ def applyBrand(showName, outputName, branding):
     draw.text(((800-w)/2, firstLineHeight),firstLineText,(255,255,255),firstLineFont, align='center')
 
 # Other Lines Show Text formatting
+    log("DEBUG", "Formatting further lines.", showID)
     otherLinesTextSize = 50
     # firstLineFont = ImageFont.truetype(<font-file>, <font-size>)
     otherLinesFont = ImageFont.truetype("Raleway-LightItalic.ttf", otherLinesTextSize)
@@ -91,6 +101,7 @@ def applyBrand(showName, outputName, branding):
     draw.text(((800-w)/2, otherLinesTextHeight), otherLines,(255,255,255),otherLinesFont, align='center')
 
 # website URY formatting
+    log("DBEUG", "Applying website branding.", showID)
     websiteURL = 'URY.ORG.UK/LIVE \n @URY1350'
     websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", otherLinesTextSize)
     draw = ImageDraw.Draw(img)
@@ -100,46 +111,62 @@ def applyBrand(showName, outputName, branding):
     # draw.text((x, y),"Sample Text",(r,g,b))
     draw.text(((800-w)/2, websiteURLHeight), websiteURL,(255,255,255),otherLinesFont, align='center')
 
-# Saves the image as the output name in a subfolder ShowImages    
+# Saves the image as the output name in a subfolder ShowImages
+    log("DEBUG", "Saving the final image.", showID)
     img.save('ShowImages/%s.jpg' %outputName)
 
 def brandingFromShowName(showName):
     if showName[:13] == "URY Presents:":
+        log("DEBUG", "Applying OB branding.", showID)
         output = 'OB'
     elif showName == "The URY Pantomime 2016: Beauty and the Beast":
+        log("DEBUG", "Applying OB branding.", showID)
         output = 'OB'
     elif showName[:1] == "#":
+        log("DEBUG", "Applying OB branding.", showID)
         output = 'OB'
     elif showName == "Georgie and Angie's Book Corner":
+        log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
     elif showName == "Stage":
+        log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
     elif showName == "Speech Showcase":
+        log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
     elif showName == "Screen":
+        log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
     elif showName == "URY Newshour":
+        log("DEBUG", "Applying news branding.", showID)
         output = 'News'
     elif showName == "York Sport Report":
+        log("DEBUG", "Applying news branding.", showID)
         output = 'News'
     elif showName == "URY:PM - (( URY Music ))":
+        log("DEBUG", "Applying music branding.", showID)
         output = 'Music'
     else:
+        log("DEBUG", "No branding to be applied.", showID)
         output = ''
     return output
 
 
 def stripPrefix(showName):
     if showName[:12] == "URY Brunch -":
+        log("DEBUG", "Removing 'URY Brunch -' from the title.", showID)
         output = showName[12:]
     elif showName[:8] == "URY:PM -":
+        log("DEBUG", "Removing 'URY:PM -' from the title.", showID)
         output = showName[8:]
     else:
+        log("DEBUG", "No prefix to be removed from the title.", showID)
         output = showName
     return output
 
 
 def normalize(input):
+    log("DEBUG", "Running normalize() function.", showID)
     words = input.split(" ")
     maxFirstLineLength = 13
     firstLine = ''
@@ -166,6 +193,7 @@ def normalize(input):
 
 
 def dealWithOtherLines(otherLinesList, word):
+    log("DEBUG", "Running otherLinesList() function.", showID)
     maxOtherLinesLength = 22
     if len(word) > maxOtherLinesLength:
         log("DCM", "Word too long for image.", showID, "Within function dealWithOtherLines().")
@@ -177,23 +205,24 @@ def dealWithOtherLines(otherLinesList, word):
     return otherLinesList
 
 
-def log(type, message, showNum="", errorMessage="No exception error message."):
-    f=open("logfile.log","a")
-    curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    f.write(curTime + " - [" + type.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
-    f.close()
-    if type=="DCM":
-        pass #Call send email function to DCM
+def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
+    if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API"):
+        f=open("logfile.log","a")
+        curTime = strftime("%Y-%m-%d %H:%M:%S.%f", gmtime())
+        f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
+        f.close()
+        if typeM == "DCM" or typeM == "API":
+            pass #Call send email function to DCM or computing
+    else:
+        pass
 
 ################################
 ################################
 #### Uses API To Get Shows #####
 ################################
 ################################
-
+log("DEBUG", "Program Started!")
 ShowsDict = getShows()
-
-print(debugMode)
 
 for key in ShowsDict:
     
@@ -202,3 +231,4 @@ for key in ShowsDict:
     branding = 'OB'
 
     applyBrand(showName, showID, branding)
+log("DEBUG", "Program Complete!")
