@@ -177,13 +177,16 @@ def dealWithOtherLines(otherLinesList, word):
     return otherLinesList
 
 
-def log(type, message, showNum="", errorMessage="No exception error message."):
-    f=open("logfile.log","a")
-    curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    f.write(curTime + " - [" + type.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
-    f.close()
-    if type=="DCM":
-        pass #Call send email function to DCM
+def log(type="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message.", mode="WARNING"):
+    if  mode == "DEBUG" || type == "DCM" || type == "API":
+        f=open("logfile.log","a")
+        curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        f.write(curTime + " - [" + type.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
+        f.close()
+        if type == "DCM" || type == "API":
+            pass #Call send email function to DCM or computing
+    else:
+        pass
 
 ################################
 ################################
