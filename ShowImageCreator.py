@@ -206,7 +206,7 @@ def dealWithOtherLines(otherLinesList, word):
 
 
 def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
-    if  debugMode == True or typeM == "DCM" or typeM == "API":
+    if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API"):
         f=open("logfile.log","a")
         curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
         f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
@@ -223,7 +223,6 @@ def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exceptio
 ################################
 log("DEBUG", "Program Started!")
 ShowsDict = getShows()
-
 
 for key in ShowsDict:
     
