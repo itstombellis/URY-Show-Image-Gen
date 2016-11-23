@@ -30,8 +30,8 @@ def getShows():
             shows[data["payload"][show]["show_id"]] = data["payload"][show]["title"]
 
         return shows
-    except:
-        log("API","Could not acess API.")
+    except IOError as e:
+        log("API","Could not acess API.", str(e))
         sys.exit(0)
 
 
@@ -70,7 +70,10 @@ def applyBrand(showName, outputName, branding):
         brandingOverlay = "BlueGeneral.png"
 
 # Determines which background image to use for the show image.
-    img = Image.open(backgroundImagePath + str(randint(1,16)) +".png")
+    try:
+        img = Image.open(backgroundImagePath + str(randint(1,16)) +".png")
+    except IOError as e:
+        log("Error", "Background image could not be opened.", str(e))
 
 # Opens overlay and pastes over the background image
     overlay = Image.open(colouredBarsPath + brandingOverlay)
