@@ -34,10 +34,11 @@ def getShows():
 
 def applyBrand(showName, outputName, branding):
     """
-    A function to create a show image for given show name and output file name.
+    A function to create a show image for given show name, output file name and branding.
     Args:
         showName (str): Show name to add to image.
         outputName (str): The name of the outputfile, standard form including the show id.
+        branding (str): The branding to be applied.
     Return:
         The function outputs a JPG image to a sub folder called ShowImages.
     """
@@ -115,6 +116,13 @@ def applyBrand(showName, outputName, branding):
     img.save('ShowImages/%s.jpg' %outputName)
 
 def brandingFromShowName(showName):
+	"""
+    A function to determine the branding to be applied based on the show name.
+    Args:
+        showName (str): The show name.
+    Return:
+        A string of what branding to apply.
+    """
     if showName[:13] == "URY Presents:":
         log("DEBUG", "Applying OB branding.", showID)
         output = 'OB'
@@ -152,6 +160,13 @@ def brandingFromShowName(showName):
 
 
 def stripPrefix(showName):
+	"""
+    A function to strip the prefix from the show name.
+    Args:
+        showName (str): The show name.
+    Return:
+        The show name without the prefix.
+    """
     if showName[:12] == "URY Brunch -":
         log("DEBUG", "Removing 'URY Brunch -' from the title.", showID)
         output = showName[12:]
@@ -165,6 +180,13 @@ def stripPrefix(showName):
 
 
 def normalize(input):
+	"""
+    A function to split the show name into seperate lines of maximum lengths.
+    Args:
+        input (str): The Show name.
+    Return:
+        Two strings. firstLine is the first line of text. otherLines is the string of other lines with line breaks inserted when necessary.
+    """
     log("DEBUG", "Running normalize() function.", showID)
     words = input.split(" ")
     maxFirstLineLength = 13
@@ -192,6 +214,14 @@ def normalize(input):
 
 
 def dealWithOtherLines(otherLinesList, word):
+	"""
+    A function to normalize the remaining lines of text (if any).
+    Args:
+        otherLinesList (list): A list representing the current lines.
+        word (str): The word to append to the image.
+    Return:
+        A list representing each line. The word will be added to whichever line it can fit in.
+    """
     log("DEBUG", "Running otherLinesList() function.", showID)
     maxOtherLinesLength = 22
     if len(word) > maxOtherLinesLength:
@@ -205,6 +235,14 @@ def dealWithOtherLines(otherLinesList, word):
 
 
 def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
+    """
+    A function to output logs to a log file for debugging or exceptions.
+    Args:
+        typeM (str): The type of log to make.
+        mesage (str): The message to explain the log.
+        showNum (str): The show ID (if there is one).
+        errorMessage (str): The exception (if there is one).
+    """
     if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API"):
         f=open("logfile.log","a")
         now = datetime.now()
