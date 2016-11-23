@@ -7,10 +7,13 @@ from time import strftime
 # Defines location of different image files to create show image.
 backgroundImagePath = "GenericShowBackgrounds/"
 colouredBarsPath = "ColouredBars/"
-apiKey = sys.argv[1]
-url = "https://ury.org.uk/api/v2/show/allshows?current_term_only=1&api_key=" + apiKey
+try:
+	apiKey = sys.argv[1]
+	url = "https://ury.org.uk/api/v2/show/allshows?current_term_only=1&api_key=" + apiKey
+	debugMode = sys.argv[2]
+except IndexError as e:
+	log("ERROR", "System Argument(s) not passed in.", str(e))
 
-debugMode = sys.argv[2]
 
 def getShows():
     """
@@ -243,7 +246,7 @@ def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exceptio
         showNum (str): The show ID (if there is one).
         errorMessage (str): The exception (if there is one).
     """
-    if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API"):
+    if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API") or (typeM == "Error"):
         f=open("logfile.log","a")
         now = datetime.now()
         curTime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
