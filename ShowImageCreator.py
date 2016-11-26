@@ -22,17 +22,17 @@ def getShows():
         The dictionary of shows with show ids mapping to the show title.
     """
     try:
-        log("DEBUG", "Running getShows() function.")
-        data = requests.get(url).json()
-        shows = {}
+    	log("DEBUG", "Running getShows() function.")
+    	data = requests.get(url).json()
+    	shows = {}
 
-        for show in data["payload"]:
-            shows[data["payload"][show]["show_id"]] = data["payload"][show]["title"]
+    	for show in data["payload"]:
+    		shows[data["payload"][show]["show_id"]] = data["payload"][show]["title"]
 
-        return shows
+    	return shows
     except IOError as e:
-        log("API","Could not acess API.", str(e))
-        sys.exit(0)
+    	log("API","Could not acess API.", str(e))
+    	sys.exit(0)
 
 
 def applyBrand(showName, outputName, branding):
@@ -123,7 +123,7 @@ def applyBrand(showName, outputName, branding):
 # Saves the image as the output name in a subfolder ShowImages
     log("DEBUG", "Saving the final image.", showID)
     try:
-        img.save('ShowImages/%s.jpg' %outputName)
+    	img.save('ShowImages/%s.jpg' %outputName)
     except "Not enough storage space!":
         log("Error", "Not enough storage space to save the show image!", showId)
 
