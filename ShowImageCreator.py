@@ -76,8 +76,11 @@ def applyBrand(showName, outputName, branding):
         log("Error", "Background image could not be opened.", str(e))
 
 # Opens overlay and pastes over the background image
-    overlay = Image.open(colouredBarsPath + brandingOverlay)
-    img.paste(overlay, (0, 0), overlay)
+    try:
+        overlay = Image.open(colouredBarsPath + brandingOverlay)
+        img.paste(overlay, (0, 0), overlay)
+    except IOError as e:
+        log("Error", "Overlay image could not be opened.", str(e))
 
 # First line formatting
     log("DEBUG", "Formatting the first line.", showID)
@@ -119,7 +122,10 @@ def applyBrand(showName, outputName, branding):
 
 # Saves the image as the output name in a subfolder ShowImages
     log("DEBUG", "Saving the final image.", showID)
-    img.save('ShowImages/%s.jpg' %outputName)
+    try:
+        img.save('ShowImages/%s.jpg' %outputName)
+    except "Not enough storage space!":
+        log("Error", "Not enough storage space to save the show image!", showId)
 
 def brandingFromShowName(showName):
 	"""
@@ -250,15 +256,18 @@ def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exceptio
         errorMessage (str): The exception (if there is one).
     """
     if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API") or (typeM == "Error"):
-        f=open("logfile.log","a")
-        now = datetime.now()
-        curTime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
-        f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
-        f.close()
-        if typeM == "DCM" or typeM == "API":
-            pass #Call send email function to DCM or computing
+        try:
+            f=open("logfile.log","a")
+            now = datetime.now()
+            curTime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
+            f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
+            f.close()
+        except IOError as e:
+            pass
+        # Call sendEmail function passing in relevant information.
     else:
         pass
+
 
 ################################
 ################################
