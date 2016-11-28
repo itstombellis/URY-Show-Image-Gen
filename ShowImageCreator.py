@@ -104,7 +104,7 @@ def applyBrand(showName, outputName, branding):
     img.save('ShowImages/%s.jpg' %outputName)
 
 def brandingFromShowName(showName):
-	"""
+    """
     A function to determine the branding to be applied based on the show name.
     Args:
         showName (str): The show name.
@@ -149,6 +149,7 @@ def brandingFromShowName(showName):
 
 def stripPrefix(showName):
 	"""
+    """
     A function to strip the prefix from the show name.
     Args:
         showName (str): The show name.
@@ -168,7 +169,7 @@ def stripPrefix(showName):
 
 
 def normalize(input):
-	"""
+    """
     A function to split the show name into seperate lines of maximum lengths.
     Args:
         input (str): The Show name.
