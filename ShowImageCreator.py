@@ -148,7 +148,6 @@ def brandingFromShowName(showName):
 
 
 def stripPrefix(showName):
-	"""
     """
     A function to strip the prefix from the show name.
     Args:
