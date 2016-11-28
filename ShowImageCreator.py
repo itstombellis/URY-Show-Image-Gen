@@ -255,7 +255,7 @@ def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exceptio
         showNum (str): The show ID (if there is one).
         errorMessage (str): The exception (if there is one).
     """
-    if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API") or (typeM == "Error"):
+    if  (debugMode.upper() == 'T') or (typeM.upper() == "DCM") or (typeM.upper() == "API") or (typeM.upper() == "ERROR"):
         try:
             f=open("logfile.log","a")
             now = datetime.now()
