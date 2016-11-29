@@ -82,43 +82,31 @@ def applyBrand(showName, outputName, branding):
     except IOError as e:
         log("Error", "Overlay image could not be opened.", str(e))
 
-# First line formatting
+# ShowName formatting
     log("DEBUG", "Formatting the first line.", showID)
-    firstLineText, otherLines = normalize(showName)
-    firstLineFontSize = 85
-    # firstLineFont = ImageFont.truetype(<font-file>, <font-size>)
-    firstLineFont = ImageFont.truetype("Raleway-Bold.ttf", firstLineFontSize)
+    normalizedText = normalize(showName)
+    text = 65
+    # textFont = ImageFont.truetype(<font-file>, <font-size>)
+    textFont = ImageFont.truetype("Raleway-Bold.ttf", text)
     
     draw = ImageDraw.Draw(img)
-    w, h = draw.textsize(firstLineText, firstLineFont)
-    firstLineHeight = 210
+    w, h = draw.textsize(normalizedText, textFont)
+    textLineHeight = 205
     
     # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text(((800-w)/2, firstLineHeight),firstLineText,(255,255,255),firstLineFont, align='center')
-
-# Other Lines Show Text formatting
-    log("DEBUG", "Formatting further lines.", showID)
-    otherLinesTextSize = 50
-    # firstLineFont = ImageFont.truetype(<font-file>, <font-size>)
-    otherLinesFont = ImageFont.truetype("Raleway-LightItalic.ttf", otherLinesTextSize)
-
-    draw = ImageDraw.Draw(img)
-    w, h = draw.textsize(otherLines, otherLinesFont)
-    otherLinesTextHeight = 300
-    
-    # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text(((800-w)/2, otherLinesTextHeight), otherLines,(255,255,255),otherLinesFont, align='center')
+    draw.text(((800-w)/2, textLineHeight),normalizedText,(255,255,255),textFont, align='center')
 
 # website URY formatting
     log("DBEUG", "Applying website branding.", showID)
     websiteURL = 'URY.ORG.UK/LIVE \n @URY1350'
-    websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", otherLinesTextSize)
+    websiteTextSize = 50
+    websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", websiteTextSize)
     draw = ImageDraw.Draw(img)
-    w, h = draw.textsize(websiteURL, otherLinesFont)
+    w, h = draw.textsize(websiteURL, websiteFont)
     websiteURLHeight = 510 
     
     # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text(((800-w)/2, websiteURLHeight), websiteURL,(255,255,255),otherLinesFont, align='center')
+    draw.text(((800-w)/2, websiteURLHeight), websiteURL,(255,255,255),websiteFont, align='center')
 
 # Saves the image as the output name in a subfolder ShowImages
     log("DEBUG", "Saving the final image.", showID)
@@ -128,7 +116,7 @@ def applyBrand(showName, outputName, branding):
         log("Error", "Not enough storage space to save the show image!", showId)
 
 def brandingFromShowName(showName):
-	"""
+    """
     A function to determine the branding to be applied based on the show name.
     Args:
         showName (str): The show name.
@@ -172,7 +160,7 @@ def brandingFromShowName(showName):
 
 
 def stripPrefix(showName):
-	"""
+    """
     A function to strip the prefix from the show name.
     Args:
         showName (str): The show name.
@@ -192,7 +180,7 @@ def stripPrefix(showName):
 
 
 def normalize(input):
-	"""
+    """
     A function to split the show name into seperate lines of maximum lengths.
     Args:
         input (str): The Show name.
@@ -201,50 +189,21 @@ def normalize(input):
     """
     log("DEBUG", "Running normalize() function.", showID)
     words = input.split(" ")
-    maxFirstLineLength = 13
-    firstLine = ''
-    otherLinesList = []
-    firstLineFull = False
+    maxLineLength = 17
+    maxNumberOfLines = 0 #TODO needs to be implemented.
+    LinesList = []
 
     for word in words:
-        if firstLineFull == False:
-            if (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength) and (len(firstLine) > 0):
-                firstLineFull = True
-                otherLinesList = dealWithOtherLines(otherLinesList, word)
-            elif (len(word) > maxFirstLineLength) and (len(firstLine) < maxFirstLineLength):
-                log("DCM", word +" is too long for first line of image.", showID)
-                break
-            elif len(firstLine + word) <= maxFirstLineLength:
-                firstLine += str(word) + ' '
-            else:
-                firstLineFull = True
-                otherLinesList = dealWithOtherLines(otherLinesList, word)
+        if len(word) > maxLineLength:
+            log("DCM", "Word too long for image.", showID, "Within function normalize().")
+            raise Exception
+        elif len(LinesList) > 0 and (len(LinesList[-1]) + len(word) < maxLineLength):
+            LinesList[-1] += " " + word
         else:
-            otherLinesList = dealWithOtherLines(otherLinesList, word)
-    otherLines = "".join(item + "\n" for item in otherLinesList)
-    return firstLine, otherLines
+            LinesList.append(word)
 
-
-def dealWithOtherLines(otherLinesList, word):
-	"""
-    A function to normalize the remaining lines of text (if any).
-    Args:
-        otherLinesList (list): A list representing the current lines.
-        word (str): The word to append to the image.
-    Return:
-        A list representing each line. The word will be added to whichever line it can fit in.
-    """
-    log("DEBUG", "Running otherLinesList() function.", showID)
-    maxOtherLinesLength = 22
-    if len(word) > maxOtherLinesLength:
-        log("DCM", "Word too long for image.", showID, "Within function dealWithOtherLines().")
-        raise Exception
-    elif len(otherLinesList) > 0 and (len(otherLinesList[-1]) + len(word) < maxOtherLinesLength):
-        otherLinesList[-1] += " " + word
-    else:
-        otherLinesList.append(word)
-    return otherLinesList
-
+    normalizedText = "".join(item + "\n" for item in LinesList)
+    return normalizedText
 
 def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
     """
@@ -278,10 +237,10 @@ log("DEBUG", "Program Started!")
 ShowsDict = getShows()
 
 for key in ShowsDict:
-    
     showName = ShowsDict[key]
     showID = str(key)
     branding = 'OB'
 
     applyBrand(showName, showID, branding)
+
 log("DEBUG", "Program Complete!")
