@@ -120,6 +120,7 @@ def brandingFromShowName(showName):
     elif showName[:1] == "#":
         log("DEBUG", "Applying OB branding.", showID)
         output = 'OB'
+    
     elif showName == "Georgie and Angie's Book Corner":
         log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
@@ -132,15 +133,27 @@ def brandingFromShowName(showName):
     elif showName == "Screen":
         log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
+    
     elif showName == "URY Newshour":
         log("DEBUG", "Applying news branding.", showID)
         output = 'News'
     elif showName == "York Sport Report":
         log("DEBUG", "Applying news branding.", showID)
         output = 'News'
+    elif showName == "URY SPORT: Grandstand":
+        log("DEBUG", "Applying news branding.", showID)
+        output = 'News'
+    elif showName == "University Radio Talk":
+        log("DEBUG", "Applying news branding.", showID)
+        output = 'News'
+    
     elif showName == "URY:PM - (( URY Music ))":
         log("DEBUG", "Applying music branding.", showID)
         output = 'Music'
+    elif showName == "((URY)) Music: Bedtime Mix":
+        log("DEBUG", "Applying music branding.", showID)
+        output = 'Music'
+    
     else:
         log("DEBUG", "No branding to be applied.", showID)
         output = ''
@@ -161,6 +174,9 @@ def stripPrefix(showName):
     elif showName[:8] == "URY:PM -":
         log("DEBUG", "Removing 'URY:PM -' from the title.", showID)
         output = showName[8:]
+    elif showName[:19] == "URY Afternoon Tea: ":
+        log("DEBUG", "Removing 'URY:PM -' from the title.", showID)
+        output = showName[19:]
     else:
         log("DEBUG", "No prefix to be removed from the title.", showID)
         output = showName
