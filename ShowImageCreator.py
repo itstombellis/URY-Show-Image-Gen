@@ -42,6 +42,7 @@ def applyBrand(showName, outputName, branding):
     Return:
         The function outputs a JPG image to a sub folder called ShowImages.
     """
+    maxNumberOfLines = 4
     # Hack to get branding from show name
     log("DEBUG", "Running applyBrand() function.", showID)
     branding = brandingFromShowName(showName)
@@ -69,42 +70,53 @@ def applyBrand(showName, outputName, branding):
         log("DEBUG", "Show branding should be generic show.", showID)
         brandingOverlay = "BlueGeneral.png"
 
+    normalizedText, lines = normalize(showName)
+    if lines <= maxNumberOfLines:
 # Determines which background image to use for the show image.
-    img = Image.open(backgroundImagePath + str(randint(1,16)) +".png")
+        img = Image.open(backgroundImagePath + str(randint(1,16)) +".png")
 
 # Opens overlay and pastes over the background image
-    overlay = Image.open(colouredBarsPath + brandingOverlay)
-    img.paste(overlay, (0, 0), overlay)
+        overlay = Image.open(colouredBarsPath + brandingOverlay)
+        img.paste(overlay, (0, 0), overlay)
 
 # ShowName formatting
-    log("DEBUG", "Formatting the first line.", showID)
-    normalizedText = normalize(showName)
-    text = 65
-    # textFont = ImageFont.truetype(<font-file>, <font-size>)
-    textFont = ImageFont.truetype("Raleway-Bold.ttf", text)
+        log("DEBUG", "Formatting the showName.", showID)
+        text = 65
+        # textFont = ImageFont.truetype(<font-file>, <font-size>)
+        textFont = ImageFont.truetype("Raleway-Bold.ttf", text)
     
-    draw = ImageDraw.Draw(img)
-    w, h = draw.textsize(normalizedText, textFont)
-    textLineHeight = 205
-    
-    # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text(((800-w)/2, textLineHeight),normalizedText,(255,255,255),textFont, align='center')
+        draw = ImageDraw.Draw(img)
+        w, h = draw.textsize(normalizedText, textFont)
+        
+        # changes the start position, to centre text vertically
+        if lines == 3:
+            textLineHeight = 230
+        elif lines == 2:
+            textLineHeight = 275
+        elif lines == 1:
+            textLineHeight = 300
+        elif lines == 4:
+            textLineHeight = 205
+
+        # draw.text((x, y),"Sample Text",(r,g,b))
+        draw.text(((800-w)/2, textLineHeight),normalizedText,(255,255,255),textFont, align='center')
 
 # website URY formatting
-    log("DBEUG", "Applying website branding.", showID)
-    websiteURL = 'URY.ORG.UK/LIVE \n @URY1350'
-    websiteTextSize = 50
-    websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", websiteTextSize)
-    draw = ImageDraw.Draw(img)
-    w, h = draw.textsize(websiteURL, websiteFont)
-    websiteURLHeight = 510 
+        log("DBEUG", "Applying website branding.", showID)
+        websiteURL = 'URY.ORG.UK/LIVE \n @URY1350'
+        websiteTextSize = 50
+        websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", websiteTextSize)
+        draw = ImageDraw.Draw(img)
+        w, h = draw.textsize(websiteURL, websiteFont)
+        websiteURLHeight = 510 
     
-    # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text(((800-w)/2, websiteURLHeight), websiteURL,(255,255,255),websiteFont, align='center')
+        # draw.text((x, y),"Sample Text",(r,g,b))
+        draw.text(((800-w)/2, websiteURLHeight), websiteURL,(255,255,255),websiteFont, align='center')
 
 # Saves the image as the output name in a subfolder ShowImages
-    log("DEBUG", "Saving the final image.", showID)
-    img.save('ShowImages/%s.jpg' %outputName)
+        log("DEBUG", "Saving the final image.", showID)
+        img.save('ShowImages/%s.jpg' %outputName)
+
 
 def brandingFromShowName(showName):
     """
@@ -184,9 +196,9 @@ def stripPrefix(showName):
     if showName[:12] == "URY Brunch -":
         log("DEBUG", "Removing 'URY Brunch -' from the title.", showID)
         output = showName[12:]
-    elif showName[:8] == "URY:PM -":
+    elif showName[:9] == "URY:PM - ":
         log("DEBUG", "Removing 'URY:PM -' from the title.", showID)
-        output = showName[8:]
+        output = showName[9:]
     elif showName[:19] == "URY Afternoon Tea: ":
         log("DEBUG", "Removing 'URY:PM -' from the title.", showID)
         output = showName[19:]
@@ -207,7 +219,6 @@ def normalize(input):
     log("DEBUG", "Running normalize() function.", showID)
     words = input.split(" ")
     maxLineLength = 17
-    maxNumberOfLines = 0 #TODO needs to be implemented.
     LinesList = []
 
     for word in words:
@@ -220,7 +231,9 @@ def normalize(input):
             LinesList.append(word)
 
     normalizedText = "".join(item + "\n" for item in LinesList)
-    return normalizedText
+    lines = normalizedText.count('\n')
+    return normalizedText, lines
+
 
 def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
     """
@@ -241,6 +254,7 @@ def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exceptio
             pass #Call send email function to DCM or computing
     else:
         pass
+
 
 ################################
 ################################
