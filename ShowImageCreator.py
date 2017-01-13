@@ -52,7 +52,7 @@ def applyBrand(showName, outputName, branding):
         brandingOverlay = "GreenSpeech.png"
     elif branding == "News":
         log("DEBUG", "Show branding should be news.", showID)
-        brandingOverlay = "BlueGeneral.png"
+        brandingOverlay = "News.png"
     elif branding == "Music":
         log("DEBUG", "Show branding should be music.", showID)
         brandingOverlay = "PurpleMusic.png"
@@ -62,6 +62,9 @@ def applyBrand(showName, outputName, branding):
     elif branding == "Old":
         log("DEBUG", "Show branding should be old.", showID)
         brandingOverlay = "WhitePreShowImageFormat.png"
+    elif branding == "Flagship":
+        log("DEBUG", "Show branding should be old.", showID)
+        brandingOverlay = "Flagship.png"
     else:
         log("DEBUG", "Show branding should be generic show.", showID)
         brandingOverlay = "BlueGeneral.png"
@@ -154,6 +157,16 @@ def brandingFromShowName(showName):
         log("DEBUG", "Applying music branding.", showID)
         output = 'Music'
     
+    elif showName[:10] == "URY Brunch":
+        log("DEBUG", "Applying flagship branding.", showID)
+        output = 'Flagship'
+    elif showName[:17] == "URY Afternoon Tea":
+        log("DEBUG", "Applying flagship branding.", showID)
+        output = 'Flagship'
+    elif showName[:8] == "URY:PM -":
+        log("DEBUG", "Applying flagship branding.", showID)
+        output = 'Flagship'
+
     else:
         log("DEBUG", "No branding to be applied.", showID)
         output = ''
@@ -241,7 +254,6 @@ for key in ShowsDict:
     showName = ShowsDict[key]
     showID = str(key)
     branding = 'OB'
-
     applyBrand(showName, showID, branding)
 
 log("DEBUG", "Program Complete!")
