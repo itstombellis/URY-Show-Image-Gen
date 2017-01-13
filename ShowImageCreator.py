@@ -42,10 +42,14 @@ def applyBrand(showName, outputName, branding):
     Return:
         The function outputs a JPG image to a sub folder called ShowImages.
     """
-    maxNumberOfLines = 4
-    # Hack to get branding from show name
-    log("DEBUG", "Running applyBrand() function.", showID)
+    
+    #####
+    ## Hack to get branding from show name
     branding = brandingFromShowName(showName)
+    #####
+    
+
+    log("DEBUG", "Running applyBrand() function.", showID)
     showName = stripPrefix(showName)
     # Determines which overlay to apply to the show image.
     if branding == "Speech":
@@ -70,52 +74,59 @@ def applyBrand(showName, outputName, branding):
         log("DEBUG", "Show branding should be generic show.", showID)
         brandingOverlay = "BlueGeneral.png"
 
-    normalizedText, lines = normalize(showName)
-    if lines <= maxNumberOfLines:
+    #maxNumberOfLines = 4
+    normalizedText, lines, text = normalize(showName, True)
+    if lines > 4:
+        normalizedText, lines, text = normalize(showName, False)
+        if lines > 6:
+            log("DCM", "Show name is far too long, runs over 6 lines", showID, "Within function applyBrand().")
+            raise Exception 
+
 # Determines which background image to use for the show image.
-        img = Image.open(backgroundImagePath + str(randint(1,16)) +".png")
+    img = Image.open(backgroundImagePath + str(randint(1,16)) +".png")
 
 # Opens overlay and pastes over the background image
-        overlay = Image.open(colouredBarsPath + brandingOverlay)
-        img.paste(overlay, (0, 0), overlay)
+    overlay = Image.open(colouredBarsPath + brandingOverlay)
+    img.paste(overlay, (0, 0), overlay)
 
 # ShowName formatting
-        log("DEBUG", "Formatting the showName.", showID)
-        text = 65
-        # textFont = ImageFont.truetype(<font-file>, <font-size>)
-        textFont = ImageFont.truetype("Raleway-Bold.ttf", text)
+    log("DEBUG", "Formatting the showName.", showID)
+    # textFont = ImageFont.truetype(<font-file>, <font-size>)
+    textFont = ImageFont.truetype("Raleway-Bold.ttf", text)
     
-        draw = ImageDraw.Draw(img)
-        w, h = draw.textsize(normalizedText, textFont)
+    draw = ImageDraw.Draw(img)
+    w, h = draw.textsize(normalizedText, textFont)
         
-        # changes the start position, to centre text vertically
-        if lines == 3:
-            textLineHeight = 230
-        elif lines == 2:
-            textLineHeight = 275
-        elif lines == 1:
-            textLineHeight = 300
-        elif lines == 4:
-            textLineHeight = 205
+    # changes the start position, to centre text vertically
+    if lines == 3:
+        textLineHeight = 230
+    elif lines == 2:
+        textLineHeight = 275
+    elif lines == 1:
+        textLineHeight = 300
+    elif lines == 4:
+        textLineHeight = 205
+    else:
+        textLineHeight = 205
 
-        # draw.text((x, y),"Sample Text",(r,g,b))
-        draw.text(((800-w)/2, textLineHeight),normalizedText,(255,255,255),textFont, align='center')
+    # draw.text((x, y),"Sample Text",(r,g,b))
+    draw.text(((800-w)/2, textLineHeight),normalizedText,(255,255,255),textFont, align='center')
 
 # website URY formatting
-        log("DBEUG", "Applying website branding.", showID)
-        websiteURL = 'URY.ORG.UK/LIVE \n @URY1350'
-        websiteTextSize = 50
-        websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", websiteTextSize)
-        draw = ImageDraw.Draw(img)
-        w, h = draw.textsize(websiteURL, websiteFont)
-        websiteURLHeight = 510 
-    
-        # draw.text((x, y),"Sample Text",(r,g,b))
-        draw.text(((800-w)/2, websiteURLHeight), websiteURL,(255,255,255),websiteFont, align='center')
+    log("DBEUG", "Applying website branding.", showID)
+    websiteURL = 'URY.ORG.UK/LIVE \n @URY1350'
+    websiteTextSize = 50
+    websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", websiteTextSize)
+    draw = ImageDraw.Draw(img)
+    w, h = draw.textsize(websiteURL, websiteFont)
+    websiteURLHeight = 510 
+
+    # draw.text((x, y),"Sample Text",(r,g,b))
+    draw.text(((800-w)/2, websiteURLHeight), websiteURL,(255,255,255),websiteFont, align='center')
 
 # Saves the image as the output name in a subfolder ShowImages
-        log("DEBUG", "Saving the final image.", showID)
-        img.save('ShowImages/%s.jpg' %outputName)
+    log("DEBUG", "Saving the final image.", showID)
+    img.save('ShowImages/%s.jpg' %outputName)
 
 
 def brandingFromShowName(showName):
@@ -178,6 +189,9 @@ def brandingFromShowName(showName):
     elif showName[:8] == "URY:PM -":
         log("DEBUG", "Applying flagship branding.", showID)
         output = 'Flagship'
+    elif showName == "National Award Nominated URY:PM with National Award Nominated K-Spence":
+        log("DEBUG", "Applying flagship branding.", showID)
+        output = 'Flagship'
 
     else:
         log("DEBUG", "No branding to be applied.", showID)
@@ -208,18 +222,30 @@ def stripPrefix(showName):
     return output
 
 
-def normalize(input):
+def normalize(input, firstAttmpt):
     """
     A function to split the show name into seperate lines of maximum lengths.
     Args:
         input (str): The Show name.
+        firstAttmpt (Bool): Is this the first attempt at normalising the text?
     Return:
         Two strings. firstLine is the first line of text. otherLines is the string of other lines with line breaks inserted when necessary.
     """
     log("DEBUG", "Running normalize() function.", showID)
     words = input.split(" ")
-    maxLineLength = 17
     LinesList = []
+
+    longestWord = 0
+    for word in words:
+        if len(word) > longestWord:
+            longestWord
+
+    if longestWord <= 17 and firstAttmpt:
+        maxLineLength = 17
+        text = 65
+    else:
+        maxLineLength = 34
+        text = 40
 
     for word in words:
         if len(word) > maxLineLength:
@@ -232,7 +258,7 @@ def normalize(input):
 
     normalizedText = "".join(item + "\n" for item in LinesList)
     lines = normalizedText.count('\n')
-    return normalizedText, lines
+    return normalizedText, lines, text
 
 
 def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exception error message."):
