@@ -81,7 +81,7 @@ def applyBrand(showName, outputName, branding):
         if lines > 6:
             log("DCM", "Show name is far too long, runs over 6 lines", showID, "Within function applyBrand().")
             raise Exception 
-
+            
 # Determines which background image to use for the show image.
     img = Image.open(backgroundImagePath + str(randint(1,16)) +".png")
 
@@ -98,16 +98,30 @@ def applyBrand(showName, outputName, branding):
     w, h = draw.textsize(normalizedText, textFont)
         
     # changes the start position, to centre text vertically
-    if lines == 3:
-        textLineHeight = 230
-    elif lines == 2:
-        textLineHeight = 275
-    elif lines == 1:
-        textLineHeight = 300
-    elif lines == 4:
-        textLineHeight = 205
+    if text == 65:
+        if lines == 3:
+            textLineHeight = 230
+        elif lines == 2:
+            textLineHeight = 275
+        elif lines == 1:
+            textLineHeight = 300
+        elif lines == 4:
+            textLineHeight = 205
+        else:
+            textLineHeight = 205
     else:
-        textLineHeight = 205
+        if lines == 1:
+            textLineHeight = 320
+        elif lines == 2:
+            textLineHeight = 295
+        elif lines == 3:
+            textLineHeight = 275
+        elif lines == 4:
+            textLineHeight = 250
+        elif lines == 5:
+            textLineHeight = 235
+        else:
+            textLineHeight = 215
 
     # draw.text((x, y),"Sample Text",(r,g,b))
     draw.text(((800-w)/2, textLineHeight),normalizedText,(255,255,255),textFont, align='center')
@@ -192,10 +206,9 @@ def brandingFromShowName(showName):
     elif showName == "National Award Nominated URY:PM with National Award Nominated K-Spence":
         log("DEBUG", "Applying flagship branding.", showID)
         output = 'Flagship'
-
     else:
         log("DEBUG", "No branding to be applied.", showID)
-        output = ''
+        output = 'OB'
     return output
 
 
@@ -247,7 +260,7 @@ def normalize(input, firstAttmpt):
         maxLineLength = 17
         text = 65
     else:
-        maxLineLength = 34
+        maxLineLength = 30
         text = 40
 
     for word in words:
