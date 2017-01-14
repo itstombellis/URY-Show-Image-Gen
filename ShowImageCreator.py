@@ -206,9 +206,10 @@ def brandingFromShowName(showName):
     elif showName == "National Award Nominated URY:PM with National Award Nominated K-Spence":
         log("DEBUG", "Applying flagship branding.", showID)
         output = 'Flagship'
+    
     else:
         log("DEBUG", "No branding to be applied.", showID)
-        output = 'OB'
+        output = ''
     return output
 
 
