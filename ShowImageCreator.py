@@ -216,6 +216,9 @@ def stripPrefix(showName):
     elif showName[:19] == "URY Afternoon Tea: ":
         log("DEBUG", "Removing 'URY:PM -' from the title.", showID)
         output = showName[19:]
+    elif showName[:12] == "URY Brunch: ":
+        log("DEBUG", "Removing 'URY:PM -' from the title.", showID)
+        output = showName[12:]
     else:
         log("DEBUG", "No prefix to be removed from the title.", showID)
         output = showName
