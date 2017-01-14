@@ -254,7 +254,7 @@ def normalize(input, firstAttmpt):
     longestWord = 0
     for word in words:
         if len(word) > longestWord:
-            longestWord
+            longestWord = len(word)
 
     if longestWord <= 17 and firstAttmpt:
         maxLineLength = 17
