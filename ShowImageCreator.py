@@ -46,35 +46,36 @@ def applyBrand(showName, outputName, branding):
         The function outputs a JPG image to a sub folder called ShowImages.
     """
     
-    #####
+    ##########################################
+    ##########################################
     ## Hack to get branding from show name
     branding = brandingFromShowName(showName)
-    #####
-    
+    ##########################################
+    ##########################################
 
     log("DEBUG", "Running applyBrand() function.", showID)
     showName = stripPrefix(showName)
     # Determines which overlay to apply to the show image.
     if branding == "Speech":
-        log("DEBUG", "Show branding should be speech.", showID)
+        log("DEBUG", "Branding speech.", showID)
         brandingOverlay = "GreenSpeech.png"
     elif branding == "News":
-        log("DEBUG", "Show branding should be news.", showID)
+        log("DEBUG", "Branding news.", showID)
         brandingOverlay = "News.png"
     elif branding == "Music":
-        log("DEBUG", "Show branding should be music.", showID)
+        log("DEBUG", "Branding music.", showID)
         brandingOverlay = "PurpleMusic.png"
     elif branding == "OB":
-        log("DEBUG", "Show branding should be OB.", showID)
+        log("DEBUG", "Branding OB.", showID)
         brandingOverlay = "RedOB.png"
     elif branding == "Old":
-        log("DEBUG", "Show branding should be old.", showID)
+        log("DEBUG", "Branding old.", showID)
         brandingOverlay = "WhitePreShowImageFormat.png"
     elif branding == "Flagship":
-        log("DEBUG", "Show branding should be old.", showID)
+        log("DEBUG", "Branding old.", showID)
         brandingOverlay = "Flagship.png"
     else:
-        log("DEBUG", "Show branding should be generic show.", showID)
+        log("DEBUG", "Branding generic show.", showID)
         brandingOverlay = "BlueGeneral.png"
 
     #maxNumberOfLines = 4
@@ -137,7 +138,7 @@ def applyBrand(showName, outputName, branding):
 
 # website URY formatting
     log("DBEUG", "Applying website branding.", showID)
-    websiteURL = 'URY.ORG.UK/LIVE \n @URY1350'
+    websiteURL = 'URY.ORG.UK \n @URY1350'
     websiteTextSize = 50
     websiteFont = ImageFont.truetype("Raleway-SemiBoldItalic.ttf", websiteTextSize)
     draw = ImageDraw.Draw(img)
@@ -164,63 +165,45 @@ def brandingFromShowName(showName):
         A string of what branding to apply.
     """
     if showName[:13] == "URY Presents:":
-        log("DEBUG", "Applying OB branding.", showID)
         output = 'OB'
     elif showName == "The URY Pantomime 2016: Beauty and the Beast":
-        log("DEBUG", "Applying OB branding.", showID)
         output = 'OB'
     elif showName[:1] == "#":
-        log("DEBUG", "Applying OB branding.", showID)
         output = 'OB'
     
     elif showName == "Georgie and Angie's Book Corner":
-        log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
     elif showName == "Stage":
-        log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
     elif showName == "Speech Showcase":
-        log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
     elif showName == "Screen":
-        log("DEBUG", "Applying speech branding.", showID)
         output = 'Speech'
     
     elif showName == "URY Newshour":
-        log("DEBUG", "Applying news branding.", showID)
         output = 'News'
     elif showName == "York Sport Report":
-        log("DEBUG", "Applying news branding.", showID)
         output = 'News'
     elif showName == "URY SPORT: Grandstand":
-        log("DEBUG", "Applying news branding.", showID)
         output = 'News'
     elif showName == "University Radio Talk":
-        log("DEBUG", "Applying news branding.", showID)
         output = 'News'
     
     elif showName == "URY:PM - (( URY Music ))":
-        log("DEBUG", "Applying music branding.", showID)
         output = 'Music'
     elif showName == "((URY)) Music: Bedtime Mix":
-        log("DEBUG", "Applying music branding.", showID)
         output = 'Music'
     
     elif showName[:10] == "URY Brunch":
-        log("DEBUG", "Applying flagship branding.", showID)
         output = 'Flagship'
     elif showName[:17] == "URY Afternoon Tea":
-        log("DEBUG", "Applying flagship branding.", showID)
         output = 'Flagship'
     elif showName[:8] == "URY:PM -":
-        log("DEBUG", "Applying flagship branding.", showID)
         output = 'Flagship'
     elif showName == "National Award Nominated URY:PM with National Award Nominated K-Spence":
-        log("DEBUG", "Applying flagship branding.", showID)
         output = 'Flagship'
     
     else:
-        log("DEBUG", "No branding to be applied.", showID)
         output = ''
     return output
 
@@ -308,7 +291,6 @@ def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exceptio
             f.close()
         except IOError as e:
             pass
-        # Call sendEmail function passing in relevant information.
     else:
         pass
 
