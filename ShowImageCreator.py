@@ -7,10 +7,13 @@ from time import strftime
 # Defines location of different image files to create show image.
 backgroundImagePath = "GenericShowBackgrounds/"
 colouredBarsPath = "ColouredBars/"
-apiKey = sys.argv[1]
-url = "https://ury.org.uk/api/v2/show/allshows?current_term_only=1&api_key=" + apiKey
+try:
+	apiKey = sys.argv[1]
+	url = "https://ury.org.uk/api/v2/show/allshows?current_term_only=1&api_key=" + apiKey
+	debugMode = sys.argv[2]
+except IndexError as e:
+	log("ERROR", "System Argument(s) not passed in.", str(e))
 
-debugMode = sys.argv[2]
 
 def getShows():
     """
@@ -19,17 +22,17 @@ def getShows():
         The dictionary of shows with show ids mapping to the show title.
     """
     try:
-        log("DEBUG", "Running getShows() function.")
-        data = requests.get(url).json()
-        shows = {}
+    	log("DEBUG", "Running getShows() function.")
+    	data = requests.get(url).json()
+    	shows = {}
 
-        for show in data["payload"]:
-            shows[data["payload"][show]["show_id"]] = data["payload"][show]["title"]
+    	for show in data["payload"]:
+    		shows[data["payload"][show]["show_id"]] = data["payload"][show]["title"]
 
-        return shows
-    except:
-        log("API","Could not acess API.")
-        sys.exit(0)
+    	return shows
+    except IOError as e:
+    	log("API","Could not acess API.", str(e))
+    	sys.exit(0)
 
 
 def applyBrand(showName, outputName, branding):
@@ -83,11 +86,17 @@ def applyBrand(showName, outputName, branding):
             raise Exception 
             
 # Determines which background image to use for the show image.
-    img = Image.open(backgroundImagePath + str(randint(1,16)) +".png")
+    try:
+        img = Image.open(backgroundImagePath + str(randint(1,16)) +".png")
+    except IOError as e:
+        log("Error", "Background image could not be opened.", str(e))
 
 # Opens overlay and pastes over the background image
-    overlay = Image.open(colouredBarsPath + brandingOverlay)
-    img.paste(overlay, (0, 0), overlay)
+    try:
+        overlay = Image.open(colouredBarsPath + brandingOverlay)
+        img.paste(overlay, (0, 0), overlay)
+    except IOError as e:
+        log("Error", "Overlay image could not be opened.", str(e))
 
 # ShowName formatting
     log("DEBUG", "Formatting the showName.", showID)
@@ -140,7 +149,10 @@ def applyBrand(showName, outputName, branding):
 
 # Saves the image as the output name in a subfolder ShowImages
     log("DEBUG", "Saving the final image.", showID)
-    img.save('ShowImages/%s.jpg' %outputName)
+    try:
+    	img.save('ShowImages/%s.jpg' %outputName)
+    except "Not enough storage space!":
+        log("Error", "Not enough storage space to save the show image!", showId)
 
 
 def brandingFromShowName(showName):
@@ -287,14 +299,16 @@ def log(typeM="DEBUG", message="NONE", showNum="NULL", errorMessage="No exceptio
         showNum (str): The show ID (if there is one).
         errorMessage (str): The exception (if there is one).
     """
-    if  (debugMode == 'T') or (typeM == "DCM") or (typeM == "API"):
-        f=open("logfile.log","a")
-        now = datetime.now()
-        curTime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
-        f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
-        f.close()
-        if typeM == "DCM" or typeM == "API":
-            pass #Call send email function to DCM or computing
+    if  (debugMode.upper() == 'T') or (typeM.upper() == "DCM") or (typeM.upper() == "API") or (typeM.upper() == "ERROR"):
+        try:
+            f=open("logfile.log","a")
+            now = datetime.now()
+            curTime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
+            f.write(curTime + " - [" + typeM.upper() + "] Show ID: {" + showNum + "} " + message + "\n" + errorMessage + "\n")
+            f.close()
+        except IOError as e:
+            pass
+        # Call sendEmail function passing in relevant information.
     else:
         pass
 
